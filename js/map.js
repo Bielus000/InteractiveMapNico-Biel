@@ -128,6 +128,14 @@
 
     // apply transform: keep centered translate(-50%,-50%), then translate by offsets and scale
     img.style.transform = `translate(-50%, -50%) translate3d(${offsetX.toFixed(2)}px, ${offsetY.toFixed(2)}px, 0) scale(${scale.toFixed(5)})`;
+
+    // Update markers scale to keep them readable during zoom
+    const markers = document.querySelectorAll('.map-marker');
+    markers.forEach(marker => {
+      // Inverse scale: as map zooms in, markers shrink proportionally to stay visible
+      const markerScale = Math.max(0.4, Math.min(1.2, 0.8 / scale));
+      marker.style.transform = `scale(${markerScale})`;
+    });
     try{ canvas.dataset.currentScale = scale.toFixed(5); }catch(e){}
 
     requestAnimationFrame(render);

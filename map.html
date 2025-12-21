@@ -29,21 +29,48 @@
       </button>
     </div> 
 
+    <!-- Right side info panel (hidden by default) -->
+    <aside class="info-panel" id="infoPanel" role="complementary" aria-hidden="true">
+      <button class="info-panel-close" id="infoPanelClose" aria-label="Cerrar panel">×</button>
+      <div class="info-panel-content" id="infoPanelContent">
+        <!-- Content will be dynamically injected here -->
+      </div>
+    </aside>
+
     <main>
       <section class="map-frame" role="region" aria-label="Mapa interactivo">
         <div class="map-canvas" id="mapCanvas" tabindex="0" aria-live="polite">
           <img id="mapImage" src="img/map2.jpeg" alt="Mapa interactivo" draggable="false" />
 
+          <!-- Map markers (example positions) -->
+          <button class="map-marker" data-type="capital" data-name="Capital del Reino" style="left: 45%; top: 35%;">
+            <img src="img/icon-capital.png" alt="Capital" class="marker-icon">
+          </button>
+          <button class="map-marker" data-type="ciudad" data-name="Fortaleza del Norte" style="left: 55%; top: 25%;">
+            <img src="img/icon-ciudad.png" alt="Fortaleza" class="marker-icon">
+          </button>
+          <button class="map-marker" data-type="pueblo" data-name="Pueblo de los Ríos" style="left: 40%; top: 50%;">
+            <img src="img/icon-pueblo.png" alt="Pueblo" class="marker-icon">
+          </button>
+          <button class="map-marker" data-type="interes" data-name="Ruinas Antiguas" style="left: 60%; top: 45%;">
+            <img src="img/icon-interes.png" alt="Punto de interés" class="marker-icon">
+          </button>
+          <button class="map-marker" data-type="batalla" data-name="Frente de Batalla Sur" style="left: 50%; top: 65%;">
+            <img src="img/icon-batalla.png" alt="Frente de batalla" class="marker-icon">
+          </button>
+          <button class="map-marker" data-type="info" data-name="Centro de Información" style="left: 35%; top: 40%;">
+            <img src="img/icon-info.png" alt="Información" class="marker-icon">
+          </button>
+
           <!-- Floating legend panel: positioned above the map, to the right of the side-panel -->
           <aside class="floating-legend" id="floatingLegend" role="complementary" aria-label="Leyenda del mapa" aria-hidden="false">
             <h3 class="legend-title">LEYENDA</h3>
             <ul class="legend-list">
-              <li class="legend-item"><span class="legend-swatch sw-1" aria-hidden="true"></span><span class="legend-text">REGIONES</span></li>
-              <li class="legend-item"><span class="legend-swatch sw-2" aria-hidden="true"></span><span class="legend-text">CAPITALES</span></li>
-              <li class="legend-item"><span class="legend-swatch sw-3" aria-hidden="true"></span><span class="legend-text">FORTALEZAS</span></li>
-              <li class="legend-item"><span class="legend-swatch sw-4" aria-hidden="true"></span><span class="legend-text">POBLADOS</span></li>
-              <li class="legend-item"><span class="legend-swatch sw-5" aria-hidden="true"></span><span class="legend-text">PUNTOS DE INTERÉS</span></li>
-              <li class="legend-item"><span class="legend-swatch sw-6" aria-hidden="true"></span><span class="legend-text">FRENTES DE BATALLA</span></li>
+              <li class="legend-item"><img src="img/icon-capital.png" alt="" class="legend-icon" aria-hidden="true"><span class="legend-text">CAPITALES</span></li>
+              <li class="legend-item"><img src="img/icon-ciudad.png" alt="" class="legend-icon" aria-hidden="true"><span class="legend-text">FORTALEZAS</span></li>
+              <li class="legend-item"><img src="img/icon-pueblo.png" alt="" class="legend-icon" aria-hidden="true"><span class="legend-text">POBLADOS</span></li>
+              <li class="legend-item"><img src="img/icon-interes.png" alt="" class="legend-icon" aria-hidden="true"><span class="legend-text">PUNTOS DE INTERÉS</span></li>
+              <li class="legend-item"><img src="img/icon-batalla.png" alt="" class="legend-icon" aria-hidden="true"><span class="legend-text">FRENTES DE BATALLA</span></li>
             </ul>
           </aside>
 
@@ -53,6 +80,7 @@
   </div>
 
   <script src="js/map.js" defer></script>
+  <script src="js/markers.js" defer></script>
 
   <!-- Inline fallback toggle: robust body-class toggle for legend -> works even if main script errors -->
   <script>
