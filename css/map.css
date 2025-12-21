@@ -1,0 +1,216 @@
+/* Map styles: background image as full canvas, zoom + panning via JS */
+
+.map-frame {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: calc(100vh - 120px); /* leave space for header/footer */
+  align-items: stretch;
+  justify-content: center;
+  padding: 8px 12px;
+}
+
+.map-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh; /* occupy full viewport */
+  overflow: hidden;
+  background: #000; /* fallback while image loads */
+  cursor: grab;
+  z-index: 0;
+}
+
+/* Side panel (left) overlaying the map */
+.side-panel {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 88px; /* adjustable */
+  background: rgba(40,35,32,0.9); /* #282320 at 90% */
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  pointer-events: auto;
+  padding-top: 12px; /* spacing at top for logo */
+}
+
+.panel-logo { display:inline-flex; align-items:center; justify-content:center; margin-bottom:10px; }
+
+.panel-logo .logo-img { height:44px; width:auto; display:block; }
+
+.panel-logo:focus, .panel-logo:hover { outline: none; opacity: 0.95; transform: translateY(-2px); }
+
+.panel-logo:focus { box-shadow: 0 0 0 3px rgba(210,154,42,0.12); border-radius:6px; }
+
+/* Panel button (placed at bottom of side-panel) */
+.panel-btn {
+  background: transparent;
+  border: none;
+  padding: 10px; /* increased clickable area */
+  margin-top: auto;
+  margin-bottom: 10px; /* sit closer to the bottom */
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 140ms ease, opacity 140ms ease;
+}
+
+.panel-btn .panel-icon {
+  width: 32px; /* reduced per request */
+  height: 32px;
+  display: block;
+  filter: grayscale(0.05) brightness(1.05);
+}
+
+.panel-btn:focus {
+  outline: 3px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+}
+
+.panel-btn:hover { transform: translateY(-2px); opacity: 0.95; }
+
+.map-canvas.dragging { cursor: grabbing; }
+
+/* Debug badge: show current scale for verification (non-intrusive) */
+.map-canvas::before {
+  content: attr(data-current-scale);
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: rgba(0,0,0,0.5);
+  color: var(--muted);
+  font-size: 12px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  z-index: 60;
+  pointer-events: none;
+}
+
+
+.map-canvas img#mapImage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  transform-origin: center center;
+  will-change: transform;
+  user-select: none;
+  pointer-events: none; /* mouse events handled on container */
+  max-width: none; /* allow image to exceed container when zooming */
+}
+
+.map-controls {
+  position: absolute;
+  left: 18px;
+  top: 18px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ctrl {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.04);
+  color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 18px;
+  backdrop-filter: blur(4px);
+}
+
+.ctrl:active { transform: translateY(1px) }
+
+@media (max-width: 720px) {
+  .map-canvas { height: calc(100vh - 140px) }
+  .ctrl { width: 36px; height: 36px; font-size: 16px }
+}
+
+/* Floating legend panel (bottom-left, beside the side-panel) */
+.floating-legend {
+  position: fixed;
+  left: calc(88px + 12px); /* side-panel width (88px) + 12px gap */
+  bottom: -14px;
+  width: 212px; /* required width */
+  height: 232px; /* required height */
+  background: rgba(40,35,32,0.9); /* #282320 at 90% */
+  z-index: 70; /* above map and controls */
+  border-radius: 10px;
+  padding: 14px 12px;
+  color: var(--muted);
+  border: 1px solid rgba(88,75,68,0.06); /* subtle frame */
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: none; /* keep design flat per previous preference */
+  pointer-events: auto;
+  font-weight: 500; /* updated weight for the legend */
+}
+
+.floating-legend .legend-title {
+  margin: 2px 0 6px 0;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: center;
+  color: var(--accent1); /* mustard accent */
+  letter-spacing: 1px;
+}
+
+.floating-legend .legend-list {
+  margin: 0;
+  padding: 2px 0 0 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.floating-legend .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.floating-legend .legend-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  flex: 0 0 18px;
+  background: var(--accent2);
+  display: inline-block;
+}
+
+/* individual swatch colors (optional subtle variants) */
+.floating-legend .sw-1 { background: rgba(193,67,25,0.98); }
+.floating-legend .sw-2 { background: rgba(210,154,42,0.98); }
+.floating-legend .sw-3 { background: rgba(162,97,42,0.95); }
+.floating-legend .sw-4 { background: rgba(168,120,82,0.95); }
+.floating-legend .sw-5 { background: rgba(194,87,45,0.95); }
+.floating-legend .sw-6 { background: rgba(108,86,70,0.9); }
+
+/* Responsive: on narrow screens move a bit inward to avoid edge collision */
+@media (max-width: 720px) {
+  .floating-legend { left: 12px; bottom: 12px; width: 184px; height: auto; max-height: 48vh; }
+  .floating-legend .legend-list { gap: 8px; }
+}
+
+/* Body-level helper: toggle legend visibility by adding/removing class on <body> */
+body.legend-hidden .floating-legend { 
+  opacity: 0; 
+  transform: translateY(10px) scale(0.985); 
+  pointer-events: none; 
+}
+

@@ -1,11 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mapa - Noctara</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/map.css">
 </head>
 <body>
-    
+  <div class="site-frame">
+    <header class="site-header">
+      <div class="container">
+        <!-- Header empty on map page: logo moved to side panel -->
+      </div>
+    </header>
+
+    <!-- Side panel: fixed, full-height, overlaying the map (placeholder for interactive controls) -->
+    <div class="side-panel" id="sidePanel" aria-hidden="false">
+      <a class="logo-link panel-logo" href="index.html" aria-label="Inicio">
+        <img src="img/logo2.png" alt="Noctara" class="logo-img">
+      </a>
+
+      <!-- panel content will be added here -->
+
+      <!-- Legend button (bottom of panel) -->
+      <button class="panel-btn btn-legend" id="btnLegend" aria-label="Abrir leyenda" title="Leyenda" aria-pressed="false" aria-expanded="true">
+        <img src="img/icon-leyenda.png" alt="Leyenda" class="panel-icon">
+      </button>
+    </div> 
+
+    <main>
+      <section class="map-frame" role="region" aria-label="Mapa interactivo">
+        <div class="map-canvas" id="mapCanvas" tabindex="0" aria-live="polite">
+          <img id="mapImage" src="img/map2.jpeg" alt="Mapa interactivo" draggable="false" />
+
+          <!-- Floating legend panel: positioned above the map, to the right of the side-panel -->
+          <aside class="floating-legend" id="floatingLegend" role="complementary" aria-label="Leyenda del mapa" aria-hidden="false">
+            <h3 class="legend-title">LEYENDA</h3>
+            <ul class="legend-list">
+              <li class="legend-item"><span class="legend-swatch sw-1" aria-hidden="true"></span><span class="legend-text">REGIONES</span></li>
+              <li class="legend-item"><span class="legend-swatch sw-2" aria-hidden="true"></span><span class="legend-text">CAPITALES</span></li>
+              <li class="legend-item"><span class="legend-swatch sw-3" aria-hidden="true"></span><span class="legend-text">FORTALEZAS</span></li>
+              <li class="legend-item"><span class="legend-swatch sw-4" aria-hidden="true"></span><span class="legend-text">POBLADOS</span></li>
+              <li class="legend-item"><span class="legend-swatch sw-5" aria-hidden="true"></span><span class="legend-text">PUNTOS DE INTERÉS</span></li>
+              <li class="legend-item"><span class="legend-swatch sw-6" aria-hidden="true"></span><span class="legend-text">FRENTES DE BATALLA</span></li>
+            </ul>
+          </aside>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/map.js" defer></script>
+
+  <!-- Inline fallback toggle: robust body-class toggle for legend -> works even if main script errors -->
+  <script>
+    (function(){
+      const btn = document.getElementById('btnLegend');
+      const floating = document.getElementById('floatingLegend');
+      if(!btn || !floating){ console.warn('[fallback] legend elements missing'); return; }
+
+      // Ensure initial state: open
+      document.body.classList.remove('legend-hidden');
+      floating.setAttribute('aria-hidden', 'false');
+      btn.setAttribute('aria-pressed', 'false');
+      btn.setAttribute('aria-expanded', 'true');
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const hidden = document.body.classList.toggle('legend-hidden');
+        floating.setAttribute('aria-hidden', hidden ? 'true' : 'false');
+        btn.setAttribute('aria-pressed', hidden ? 'true' : 'false');
+        btn.setAttribute('aria-expanded', hidden ? 'false' : 'true');
+        console.info('[fallback] toggle clicked, hidden=', hidden);
+      });
+
+      // support keyboard activation
+      btn.addEventListener('keydown', (e) => {
+        if(e.key === ' ' || e.key === 'Spacebar' || e.key === 'Enter'){
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
