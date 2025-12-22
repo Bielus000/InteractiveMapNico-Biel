@@ -30,26 +30,34 @@
     const ih = img.naturalHeight || img.height;
     if(!iw || !ih) return;
 
-    // Compute scales: allow cover (fill) as initial scale
-    const fit = Math.min(cw / iw, ch / ih, 1);     // contain
-    const cover = Math.max(cw / iw, ch / ih);      // cover (fill)
+    // Compute scales: fit means entire image visible in viewport
+    const fit = Math.min(cw / iw, ch / ih);     // contain - entire image visible
+    const cover = Math.max(cw / iw, ch / ih);   // cover (fill) - image fills viewport
 
-    // Use cover as initial scale so the image fills the viewport; allow zooming out to fit
+    // Use fit as initial scale so the entire map is visible from the start
     minScale = fit;
     maxScale = Math.max(cover * 3, cover + 0.5);
 
-    targetScale = scale = cover;
-    img.style.transform = `translate(-50%, -50%) scale(${scale.toFixed(5)})`;
+    scale = fit;
+    targetScale = fit;
+    // Reset offsets to center the image properly
+    targetOffsetX = offsetX = 0;
+    targetOffsetY = offsetY = 0;
+    img.style.transform = `translate(-50%, -50%) translate3d(0px, 0px, 0) scale(${scale.toFixed(5)})`;
 
     // Debug: report calculated scales and expose current scale on the container for verification
-    console.info('[map] initFit', { fit, cover, minScale, maxScale });
+    console.info('[map] initFit', { fit, cover, minScale, maxScale, scale });
     try{ canvas.dataset.currentScale = scale.toFixed(5); }catch(e){}
   }
 
-  // Run on load and on resize
+  // Run on load and on resize - IMPORTANT: call this first before render loop starts
   img.addEventListener('load', initFit);
-  if(img.complete) initFit();
   window.addEventListener('resize', initFit);
+  
+  // If image is already cached/complete, initialize immediately
+  if(img.complete) {
+    initFit();
+  }
 
   // Helpers
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -114,6 +122,14 @@
 
   // Animation loop: interpolate and apply transform
   function render(){
+    // Ensure initialization if not done
+    const iw = img.naturalWidth || img.width;
+    const ih = img.naturalHeight || img.height;
+    if((iw > 0 && ih > 0) && (minScale === 1 && maxScale === 3)){
+      // Initialization hasn't run yet, do it now
+      initFit();
+    }
+
     // smooth scale
     scale += (targetScale - scale) * (ease + 0.02);
 
