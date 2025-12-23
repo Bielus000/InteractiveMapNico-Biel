@@ -112,6 +112,7 @@ body {
   height: 100%;
   display: block;
   touch-action: none;
+  transform-origin: center center;
   transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -127,6 +128,130 @@ body {
 #layer2, #markersGroup {
   transition: opacity 0.4s ease;
 }
+
+/* Floating legend */
+.legend {
+  position: fixed;
+  left: 20px;
+  bottom: 30px;
+  z-index: 80;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.12);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+  min-width: 220px;
+}
+
+.legend-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.legend-header button {
+  appearance: none;
+  border: 0;
+  background: rgba(0,0,0,0.06);
+  color: #1a1a1a;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.legend-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.legend-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+
+.legend-list img {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+.legend-toggle {
+  position: fixed;
+  left: 20px;
+  bottom: 30px;
+  z-index: 81;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.92);
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+}
+
+/* Side panel & overlay */
+.side-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 90;
+}
+
+.side-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: min(560px, 48vw);
+  background: #ffffff;
+  color: #1a1a1a;
+  transform: translateX(100%);
+  transition: transform 280ms ease;
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+}
+
+.side-panel.open {
+  transform: translateX(0);
+}
+
+.side-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.side-panel-header button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.side-panel-body {
+  padding: 16px;
+  overflow: auto;
+}
+
+.marker-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.marker-title img { width: 28px; height: 28px; }
 
 /* Zoom Controls */
 .zoom-controls {

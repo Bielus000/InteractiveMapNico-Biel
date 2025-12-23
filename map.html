@@ -57,6 +57,25 @@
     </svg>
   </div>
 
+  <!-- Leyenda flotante -->
+  <aside class="legend" id="legend">
+    <div class="legend-header">
+      <strong>Llegenda</strong>
+      <button id="legendClose" aria-label="Amaga la llegenda">×</button>
+    </div>
+    <ul class="legend-list">
+      <li><img src="img/icon-capital.png" alt="Capital"> Capital</li>
+      <li><img src="img/icon-ciudad.png" alt="Ciutat"> Ciutat</li>
+      <li><img src="img/icon-pueblo.png" alt="Poble"> Poble</li>
+      <li><img src="img/icon-batalla.png" alt="Batalla"> Batalla</li>
+      <li><img src="img/icon-interes.png" alt="Interès"> Punt d'interès</li>
+      <li><img src="img/icon-info.png" alt="Info"> Informació</li>
+    </ul>
+  </aside>
+
+  <!-- Botó per reobrir llegenda quan està amagada -->
+  <button class="legend-toggle" id="legendToggle" aria-label="Mostra la llegenda" hidden>◀</button>
+
   <!-- Controles de zoom -->
   <div class="zoom-controls">
     <button id="zoomIn" aria-label="Acercar zoom">+</button>
@@ -66,6 +85,18 @@
 
   <!-- Info tooltip para marcadores -->
   <div id="markerTooltip" class="marker-tooltip" hidden></div>
+
+  <!-- Panel lateral per info de marcador -->
+  <div id="sideOverlay" class="side-overlay" hidden></div>
+  <aside id="sidePanel" class="side-panel" aria-hidden="true">
+    <div class="side-panel-header">
+      <h3 id="panelTitle">Detall</h3>
+      <button id="panelClose" aria-label="Tanca el panell">×</button>
+    </div>
+    <div id="panelBody" class="side-panel-body">
+      <!-- Contingut dinàmic del marcador -->
+    </div>
+  </aside>
 
   <script src="js/map.js" defer></script>
   <script src="js/markers.js" defer></script>
