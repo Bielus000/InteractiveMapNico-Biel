@@ -1,5 +1,32 @@
 /* Base styles for Noctara - desktop-first scaffold */
 
+/* Reset & Layout */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.site-frame {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
 /* ---------------------------------------------
    Variables
    --------------------------------------------- */
@@ -117,23 +144,23 @@
   position: relative;
   flex: 1; /* fill remaining vertical space inside .site-frame */
   width: 100%;
-  background-image: url('../img/mapa.jpg'); /* use provided mapa.jpg */
+  height: 100%; /* Ensure hero fills available height */
+  background-image: url('../img/map2.jpeg'); /* use provided mapa.jpg */
   background-size: cover;
   background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url('../img/mapa.jpg');
-  background-size: cover;
-  background-position: center;
+  background-image: url('../img/map2.jpeg');
+  background-size: cover;  background-position: center;
   filter: blur(6px) saturate(1.05);
   mix-blend-mode: color-dodge; /* sobreexposición de color */
   opacity: 0.5;
