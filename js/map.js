@@ -3,7 +3,10 @@
   const mapContainer = document.querySelector('.map-container');
   const layer1 = document.getElementById('layer1');
   const layer2 = document.getElementById('layer2');
-  const markersGroup = document.getElementById('markersGroup');
+  const markersArios = document.getElementById('markersArios');
+  const markersPanafricanos = document.getElementById('markersPanafricanos');
+  const markersOtros = document.getElementById('markersOtros');
+  const markersGroup = [markersArios, markersPanafricanos, markersOtros].filter(Boolean);
   const zoomInBtn = document.getElementById('zoomIn');
   const zoomOutBtn = document.getElementById('zoomOut');
   const zoomResetBtn = document.getElementById('zoomReset');
@@ -17,7 +20,7 @@
   const panelTitle = document.getElementById('panelTitle');
   const panelBody = document.getElementById('panelBody');
 
-  if (!svg || !layer1 || !layer2 || !markersGroup) return;
+  if (!svg || !layer1 || !layer2 || markersGroup.length === 0) return;
 
   // Estado del mapa
   let scale = 1.2; // initial zoom level
@@ -51,7 +54,9 @@
     
     // Mostrar/ocultar marcadores según zoom
     const markersOpacity = Math.max(0, Math.min(1, (scale - MARKERS_THRESHOLD) / 0.3));
-    markersGroup.style.opacity = markersOpacity;
+    markersGroup.forEach(group => {
+      group.style.opacity = markersOpacity;
+    });
 
     // Llegenda: amagar quan fem zoom i mostrar toggle
     if (legend) {

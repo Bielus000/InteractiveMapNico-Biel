@@ -94,6 +94,11 @@ body {
   display: block;
 }
 
+/* Marcadores con contorno blanco */
+.marker image {
+  filter: url(#whiteStroke);
+}
+
 /* Map Container */
 .map-container {
   width: 100%;

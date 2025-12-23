@@ -24,48 +24,125 @@
         <pattern id="mapLayer2" patternUnits="userSpaceOnUse" width="1920" height="1080">
           <image href="img/map2.jpeg" x="0" y="0" width="1920" height="1080" preserveAspectRatio="xMidYMid slice"/>
         </pattern>
+        <!-- Filtro para contorno blanco detrás de marcadores -->
+        <filter id="whiteStroke" x="-50%" y="-50%" width="200%" height="200%">
+          <feMorphology in="SourceAlpha" operator="dilate" radius="50"/>
+          <feFlood flood-color="white" flood-opacity="1"/>
+          <feComposite in2="SourceAlpha" operator="in"/>
+          <feComposite in2="SourceGraphic" operator="out" result="outline"/>
+          <feComposite in="outline" in2="SourceGraphic" operator="over"/>
+        </filter>
       </defs>
       
-      <!-- Capa base (map.jpeg) -->
+      <!-- CAPA BASE: se muestra por defecto -->
       <rect id="layer1" x="0" y="0" width="1920" height="1080" fill="url(#mapLayer1)"/>
-      
-      <!-- Icones visibles a la primera capa (ciutat i capital) -->
+      <!-- Icones visibles a la primera capa (capitales) -->
       <g id="layer1Icons">
-        <!-- Ciutat (ajusta data-x/data-y a la posició desitjada) -->
-        <g class="marker" data-x="620" data-y="360" data-name="Ciutat (capa 1)" data-icon="ciudad">
-          <image href="img/icon-ciudad.png" x="604" y="344" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        <!-- Capital Panafricana -->
+        <g class="marker" data-x="1223" data-y="230" data-name="Ciutat (capa 1)" data-icon="ciudad">
+          <image href="img/icon-capital.png" x="604" y="344" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
         </g>
-        <!-- Capital (ajusta data-x/data-y a la posició desitjada) -->
-        <g class="marker" data-x="1320" data-y="720" data-name="Capital (capa 1)" data-icon="capital">
+        <!-- Capital Aria -->
+        <g class="marker" data-x="737" data-y="515" data-name="Capital (capa 1)" data-icon="capital">
           <image href="img/icon-capital.png" x="1304" y="704" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
         </g>
       </g>
       
-      <!-- Capa de detalle (map2.jpeg) - se muestra al hacer zoom -->
+      <!-- CAPA DETALLE: se muestra al hacer zoom -->
       <rect id="layer2" x="0" y="0" width="1920" height="1080" fill="url(#mapLayer2)" opacity="0"/>
       
-      <!-- Grupo de marcadores - aparecen con zoom -->
-      <g id="markersGroup" opacity="0">
-        <!-- Marcador ejemplo: Capital - Coordenadas (960, 540) -->
-        <g class="marker" data-x="960" data-y="540" data-name="Capital Central" data-icon="capital">
+      <!-- GRUPO DE MARCADORES - ARIOS -->
+      <g id="markersArios" opacity="0">
+        <!-- Marcador: Capital Aria -->
+        <g class="marker" data-x="737" data-y="515" data-name="Capital Aria" data-icon="capital">
           <image href="img/icon-capital.png" x="944" y="524" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
         </g>
-        
-        <!-- Marcador ejemplo: Ciudad - Coordenadas (480, 270) -->
-        <g class="marker" data-x="480" data-y="270" data-name="Ciudad Norte" data-icon="ciudad">
+        <!-- Marcador: Fábrica -->
+        <g class="marker" data-x="522" data-y="282" data-name="Fábrica Militar" data-icon="ciudad">
           <image href="img/icon-ciudad.png" x="464" y="254" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
         </g>
-        
-        <!-- Marcador ejemplo: Batalla - Coordenadas (1440, 810) -->
-        <g class="marker" data-x="1440" data-y="810" data-name="Campo de Batalla" data-icon="batalla">
-          <image href="img/icon-batalla.png" x="1424" y="794" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        <!-- Marcador: Pueblo 1 -->
+        <g class="marker" data-x="890" data-y="620" data-name="Pueblo 1" data-icon="pueblo">
+          <image href="img/icon-pueblo.png" x="464" y="254" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
         </g>
-        
-        <!-- Marcador ejemplo: Punto de interés - Coordenadas (1200, 400) -->
-        <g class="marker" data-x="1200" data-y="400" data-name="Lugar de Interés" data-icon="interes">
+        <!-- Marcador: Pueblo 2 -->
+        <g class="marker" data-x="858" data-y="365" data-name="Pueblo 2" data-icon="pueblo">
+          <image href="img/icon-pueblo.png" x="464" y="254" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        <!-- Marcador: Punto de interés 1 -->
+        <g class="marker" data-x="830" data-y="184" data-name="Esclavos" data-icon="interes">
+          <image href="img/icon-interes.png" x="1184" y="384" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        <!-- Marcador: Punto de interés 2 -->
+        <g class="marker" data-x="630" data-y="815" data-name="Silo Nuclear" data-icon="interes">
           <image href="img/icon-interes.png" x="1184" y="384" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
         </g>
       </g>
+
+ <!-- GRUPO DE MARCADORES - PANAFRICANOS -->
+   <g id="markersPanafricanos" opacity="0">
+        <!-- Marcador: Capital Panafricana -->
+        <g class="marker" data-x="1223" data-y="230" data-name="Capital Panafricana" data-icon="capital">
+          <image href="img/icon-capital.png" x="1207" y="214" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        <!-- Marcador: Fortaleza -->
+        <g class="marker" data-x="1200" data-y="830" data-name="Fortaleza" data-icon="fortaleza">
+          <image href="img/icon-ciudad.png" x="464" y="254" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        <!-- Marcador: Pueblo 1 -->
+        <g class="marker" data-x="1230" data-y="375" data-name="Pueblo 1" data-icon="pueblo">
+          <image href="img/icon-pueblo.png" x="464" y="254" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        <!-- Marcador: Pueblo 2 -->
+        <g class="marker" data-x="1415" data-y="505" data-name="Pueblo 2" data-icon="pueblo">
+          <image href="img/icon-pueblo.png" x="464" y="254" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        <!-- Marcador: Pueblo 3 -->
+        <g class="marker" data-x="1215" data-y="618" data-name="Pueblo 3" data-icon="pueblo">
+          <image href="img/icon-pueblo.png" x="464" y="254" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        <!-- Marcador: Punto de interés 1 -->
+        <g class="marker" data-x="1065" data-y="230" data-name="Cantera" data-icon="interes">
+          <image href="img/icon-interes.png" x="1184" y="384" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+         <!-- Marcador: Punto de interés 2 -->
+        <g class="marker" data-x="1396" data-y="335" data-name="Hangar" data-icon="interes">
+          <image href="img/icon-interes.png" x="1184" y="384" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        <!-- Marcador: Punto de interés 3 -->
+        <g class="marker" data-x="1483" data-y="750" data-name="Puerto" data-icon="interes">
+          <image href="img/icon-interes.png" x="1184" y="384" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+      </g>
+
+      <!-- GRUPO DE MARCADORES - OTROS -->
+      <g id="markersOtros" opacity="0">
+        <!-- Marcador: Frente de Batalla 1 -->
+        <g class="marker" data-x="938" data-y="300" data-name="Frente de Batalla1" data-icon="batalla">
+          <image href="img/icon-batalla.png" x="684" y="484" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        <!-- Marcador: Frente de Batalla 2 -->
+        <g class="marker" data-x="975" data-y="490" data-name="Frente de Batalla2" data-icon="batalla">
+          <image href="img/icon-batalla.png" x="554" y="284" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        <!-- Marcador: Frente de Batalla 3 -->
+        <g class="marker" data-x="915" data-y="684" data-name="Frente de Batalla3" data-icon="batalla">
+          <image href="img/icon-batalla.png" x="684" y="484" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        <!-- Marcador: Punto de información 1 -->
+        <g class="marker" data-x="1110" data-y="460" data-name="Bosque" data-icon="info">
+          <image href="img/icon-info.png" x="1184" y="384" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        <!-- Marcador: Punto de información 2 -->
+        <g class="marker" data-x="1040" data-y="650" data-name="Rio" data-icon="info">
+          <image href="img/icon-info.png" x="1184" y="384" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        <!-- Marcador: Punto de información 3 -->
+        <g class="marker" data-x="565" data-y="392" data-name="Lago" data-icon="info">
+          <image href="img/icon-info.png" x="1184" y="384" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+
+
     </svg>
   </div>
 
