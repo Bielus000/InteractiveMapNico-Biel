@@ -1,0 +1,95 @@
+:root{
+    --color-glass-styile: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(0,0,0,0.000) 0.01%,rgba(0,0,0,0.000) 99.99%,rgba(255,255,255,1) 100%);
+	--color-light-gray-footer: rgba(230,230,230,1);
+	--color-black: rgba(0,0,0,1);
+	--color-white: rgba(255,255,255,1);
+	--color-light-gray: rgba(217,217,217,1);
+	--color-blue: rgba(29,31,59,1);
+	--color-gray: rgba(160,160,160,1);
+}
+.text-style-normal-text {
+	font-size: 24px;
+	font-family: Inter;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	text-transform: none;
+}
+.text-style-subtitle-text {
+	font-size: 16px;
+	font-family: Inter;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	text-transform: none;
+}
+.text-style-title-text {
+	font-size: 32px;
+	font-family: Inter;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	text-transform: none;
+}
+.text-style-big-text {
+	font-size: 64px;
+	font-family: Inter;
+	font-weight: 900;
+	font-style: normal;
+	letter-spacing: -0.04em;
+	text-decoration: none;
+	text-transform: none;
+}
+.text-style-title-history-text {
+	font-size: 48px;
+	font-family: Inter;
+	font-weight: 900;
+	font-style: normal;
+	text-decoration: none;
+	text-transform: none;
+}
+/* ---------------------------------------------
+   Header / Navigation
+   --------------------------------------------- */
+
+header .container {
+            text-align: center;
+            padding: 30px 10px;
+        }
+        
+header .container a {
+            text-decoration: none;
+            color: black;
+        }
+        
+header .container h1 {
+            font-family: 'Big Text', sans-serif;
+            color: black;
+        }
+
+/* ---------------------------------------------
+   Video Section
+   --------------------------------------------- */
+
+.video .container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+	padding: 40px 20px;
+}
+
+.video-title {
+	font-family: 'Big Text', sans-serif;
+	font-size: 64px;
+	font-weight: 900;
+	letter-spacing: -0.04em;
+	text-align: center;
+}
+
+.video-player {
+	width: 1400px;
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
