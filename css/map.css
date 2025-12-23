@@ -326,17 +326,26 @@ body {
 /* Markers */
 .marker {
   cursor: pointer;
-  transition: transform 180ms ease, filter 180ms ease;
-}
-
-.marker:hover {
-  transform: scale(1.2);
-  filter: brightness(1.15) drop-shadow(0 4px 12px rgba(193, 68, 26, 0.6));
+  pointer-events: auto;
 }
 
 .marker image {
-  pointer-events: none;
+  filter: url(#whiteStroke);
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition: transform 180ms ease, filter 180ms ease;
+  pointer-events: auto;
 }
+
+.marker:hover image {
+  transform: scale(1.12);
+  filter: url(#whiteStroke) brightness(1.08) drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
+}
+
+/* Panel hero image */
+.panel-hero { margin: 12px 0 14px; }
+.panel-hero img { width: 100%; height: auto; border-radius: 10px; display: block; }
+.marker-desc { margin-top: 8px; line-height: 1.55; }
 
 /* Responsive */
 @media (max-width: 768px) {

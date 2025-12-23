@@ -270,12 +270,17 @@
       e.stopPropagation();
       const name = marker.getAttribute('data-name') || 'Detall';
       const icon = marker.getAttribute('data-icon') || 'info';
+      const desc = marker.getAttribute('data-desc') || 'Descripció del punt seleccionat. Pots personalitzar aquest contingut amb text, imatges o enllaços.';
+      const image = marker.getAttribute('data-image') || '';
+
+      const heroImageHtml = image ? `<div class="panel-hero"><img src="${image}" alt="${name}"></div>` : '';
       const contentHtml = `
         <div class="marker-title">
           <img src="img/icon-${icon}.png" alt="${icon}">
           <strong>${name}</strong>
         </div>
-        <p style="margin-top:12px; line-height:1.5">Descripció del punt seleccionat. Pots personalitzar aquest contingut amb text, imatges o enllaços.</p>
+        ${heroImageHtml}
+        <p class="marker-desc">${desc}</p>
       `;
       openPanel({ title: name, icon, contentHtml });
     });
