@@ -29,6 +29,35 @@
             <p class="noctara-description">Però la bellesa de les nostres nits amaga una cicatriu profunda. Fa més d'un segle, un meteorit va esmicolar el nostre satèl·lit i ens va condemnar a l'Era de la Foscor i a la colonització. Aquesta web narra l'ascens de la Civilització Panafricana: els guardians que, des de la resistència clandestina, van desxifrar els secrets del meteorit per alliberar el món. Avui, lideren l'Aliança Global en el repte més gran de la història: la Fase Dos de la Recuperació Lunar. La nostra missió no és només sobreviure, sinó cosir el cel i tornar a unir les plaques tectòniques de la Lluna abans que sigui massa tard.</p>
         </div>
     </section>
+    <section class="lore">
+        <div class="container">
+            <div class="lore-tabs" role="tablist" aria-label="Categories de lore">
+                <button class="lore-tab active" role="tab" aria-selected="true" aria-controls="panel-bandols" id="tab-bandols" data-target="panel-bandols">BANDOLS</button>
+                <button class="lore-tab" role="tab" aria-selected="false" aria-controls="panel-regions" id="tab-regions" data-target="panel-regions">REGIONS</button>
+                <button class="lore-tab" role="tab" aria-selected="false" aria-controls="panel-ciutats" id="tab-ciutats" data-target="panel-ciutats">CIUTATS</button>
+                <button class="lore-tab" role="tab" aria-selected="false" aria-controls="panel-personatges" id="tab-personatges" data-target="panel-personatges">PERSONATGES</button>
+            </div>
+
+            <div class="lore-panels">
+                <div class="tab-panel active" role="region" id="panel-bandols" aria-labelledby="tab-bandols">
+                    <h2 class="panel-title">Bandols</h2>
+                    <p class="panel-text">Informació sobre els bandols del món de Noctara. Afegeix aquí el contingut, factions, objectius i relacions.</p>
+                </div>
+                <div class="tab-panel" role="region" id="panel-regions" aria-labelledby="tab-regions" hidden>
+                    <h2 class="panel-title">Regions</h2>
+                    <p class="panel-text">Descripció de les regions principals: clima, recursos, cultura i conflictes.</p>
+                </div>
+                <div class="tab-panel" role="region" id="panel-ciutats" aria-labelledby="tab-ciutats" hidden>
+                    <h2 class="panel-title">Ciutats</h2>
+                    <p class="panel-text">Ciutats destacades, punts d'interès i històries locals.</p>
+                </div>
+                <div class="tab-panel" role="region" id="panel-personatges" aria-labelledby="tab-personatges" hidden>
+                    <h2 class="panel-title">Personatges</h2>
+                    <p class="panel-text">Personatges clau, biografies i vincles amb els esdeveniments.</p>
+                </div>
+            </div>
+        </div>
+    </section>
     <script src="js/lore.js" defer></script>
 </body>
 </html>

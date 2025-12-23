@@ -93,3 +93,77 @@ header .container h1 {
 	height: auto;
 	display: block;
 }
+
+/* ---------------------------------------------
+   Lore Section
+   --------------------------------------------- */
+
+.lore .container {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	padding: 40px 20px;
+	background: var(--color-light-gray-footer);
+
+}
+
+.lore-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	justify-content: center;
+}
+
+.lore-tab {
+	appearance: none;
+	border: 2px solid var(--color-black);
+	background: var(--color-white);
+	color: var(--color-black);
+	padding: 12px 20px;
+	border-radius: 8px;
+	text-transform: uppercase;
+	font-family: Inter, system-ui, Arial, sans-serif;
+	font-weight: 800;
+	font-size: 16px;
+	letter-spacing: 0.04em;
+	cursor: pointer;
+	transition: background .15s ease, color .15s ease, transform .05s ease;
+}
+
+.lore-tab:hover {
+	background: var(--color-light-gray);
+}
+
+.lore-tab.active {
+	background: var(--color-black);
+	color: var(--color-white);
+}
+
+.lore-panels {
+	padding: 20px;
+}
+
+.tab-panel {
+	display: none;
+}
+
+.tab-panel.active {
+	display: block;
+}
+
+.panel-title {
+	font-size: 28px;
+	font-weight: 800;
+	margin: 0 0 10px 0;
+}
+
+.panel-text {
+	font-size: 18px;
+	line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+	.lore-title { font-size: 36px; }
+	.panel-title { font-size: 22px; }
+	.panel-text { font-size: 16px; }
+}
