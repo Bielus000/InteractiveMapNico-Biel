@@ -8,110 +8,66 @@
 </head>
 
 <body>
-  <div class="site-frame">
-    <header class="site-header">
-      <div class="container">
-        <!-- Header empty on map page: logo moved to side panel -->
-      </div>
-    </header>
+  <!-- Logo home button -->
+  <a href="index.html" class="home-logo" aria-label="Volver al inicio">
+    <img src="img/logo2.png" alt="Noctara">
+  </a>
 
-    <!-- Side panel: fixed, full-height, overlaying the map (placeholder for interactive controls) -->
-    <div class="side-panel" id="sidePanel" aria-hidden="false">
-      <a class="logo-link panel-logo" href="index.html" aria-label="Inicio">
-        <img src="img/logo2.png" alt="Noctara" class="logo-img">
-      </a>
-
-      <!-- panel content will be added here -->
-
-      <!-- Legend button (bottom of panel) -->
-      <button class="panel-btn btn-legend" id="btnLegend" aria-label="Abrir leyenda" title="Leyenda" aria-pressed="false" aria-expanded="true">
-        <img src="img/icon-leyenda.png" alt="Leyenda" class="panel-icon">
-      </button>
-    </div> 
-
-    <!-- Right side info panel (hidden by default) -->
-    <aside class="info-panel" id="infoPanel" role="complementary" aria-hidden="true">
-      <button class="info-panel-close" id="infoPanelClose" aria-label="Cerrar panel">×</button>
-      <div class="info-panel-content" id="infoPanelContent">
-        <!-- Content will be dynamically injected here -->
-      </div>
-    </aside>
-
-    <main>
-      <section class="map-frame" role="region" aria-label="Mapa interactivo">
-        <div class="map-canvas" id="mapCanvas" tabindex="0" aria-live="polite">
-          <img id="mapImage" src="img/map2.jpeg" alt="Mapa interactivo" draggable="false" />
-
-          <!-- Map markers (example positions) -->
-          <button class="map-marker" data-type="capital" data-name="Capital del Reino" style="left: 45%; top: 35%;">
-            <img src="img/icon-capital.png" alt="Capital" class="marker-icon">
-          </button>
-          <button class="map-marker" data-type="ciudad" data-name="Fortaleza del Norte" style="left: 55%; top: 25%;">
-            <img src="img/icon-ciudad.png" alt="Fortaleza" class="marker-icon">
-          </button>
-          <button class="map-marker" data-type="pueblo" data-name="Pueblo de los Ríos" style="left: 40%; top: 50%;">
-            <img src="img/icon-pueblo.png" alt="Pueblo" class="marker-icon">
-          </button>
-          <button class="map-marker" data-type="interes" data-name="Ruinas Antiguas" style="left: 60%; top: 45%;">
-            <img src="img/icon-interes.png" alt="Punto de interés" class="marker-icon">
-          </button>
-          <button class="map-marker" data-type="batalla" data-name="Frente de Batalla Sur" style="left: 50%; top: 65%;">
-            <img src="img/icon-batalla.png" alt="Frente de batalla" class="marker-icon">
-          </button>
-          <button class="map-marker" data-type="info" data-name="Centro de Información" style="left: 35%; top: 40%;">
-            <img src="img/icon-info.png" alt="Información" class="marker-icon">
-          </button>
-
-          <!-- Floating legend panel: positioned above the map, to the right of the side-panel -->
-          <aside class="floating-legend" id="floatingLegend" role="complementary" aria-label="Leyenda del mapa" aria-hidden="false">
-            <h3 class="legend-title">LEYENDA</h3>
-            <ul class="legend-list">
-              <li class="legend-item"><img src="img/icon-capital.png" alt="" class="legend-icon" aria-hidden="true"><span class="legend-text">CAPITALES</span></li>
-              <li class="legend-item"><img src="img/icon-ciudad.png" alt="" class="legend-icon" aria-hidden="true"><span class="legend-text">FORTALEZAS</span></li>
-              <li class="legend-item"><img src="img/icon-pueblo.png" alt="" class="legend-icon" aria-hidden="true"><span class="legend-text">POBLADOS</span></li>
-              <li class="legend-item"><img src="img/icon-interes.png" alt="" class="legend-icon" aria-hidden="true"><span class="legend-text">PUNTOS DE INTERÉS</span></li>
-              <li class="legend-item"><img src="img/icon-batalla.png" alt="" class="legend-icon" aria-hidden="true"><span class="legend-text">FRENTES DE BATALLA</span></li>
-            </ul>
-          </aside>
-
-        </div>
-      </section>
-    </main>
+  <!-- Map container -->
+  <div class="map-container">
+    <svg id="mapSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+      <defs>
+        <!-- Define las imágenes como patrones -->
+        <pattern id="mapLayer1" patternUnits="userSpaceOnUse" width="1920" height="1080">
+          <image href="img/map.jpeg" x="0" y="0" width="1920" height="1080" preserveAspectRatio="xMidYMid slice"/>
+        </pattern>
+        <pattern id="mapLayer2" patternUnits="userSpaceOnUse" width="1920" height="1080">
+          <image href="img/map2.jpeg" x="0" y="0" width="1920" height="1080" preserveAspectRatio="xMidYMid slice"/>
+        </pattern>
+      </defs>
+      
+      <!-- Capa base (map.jpeg) -->
+      <rect id="layer1" x="0" y="0" width="1920" height="1080" fill="url(#mapLayer1)"/>
+      
+      <!-- Capa de detalle (map2.jpeg) - se muestra al hacer zoom -->
+      <rect id="layer2" x="0" y="0" width="1920" height="1080" fill="url(#mapLayer2)" opacity="0"/>
+      
+      <!-- Grupo de marcadores - aparecen con zoom -->
+      <g id="markersGroup" opacity="0">
+        <!-- Marcador ejemplo: Capital - Coordenadas (960, 540) -->
+        <g class="marker" data-x="960" data-y="540" data-name="Capital Central" data-icon="capital">
+          <image href="img/icon-capital.png" x="944" y="524" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        
+        <!-- Marcador ejemplo: Ciudad - Coordenadas (480, 270) -->
+        <g class="marker" data-x="480" data-y="270" data-name="Ciudad Norte" data-icon="ciudad">
+          <image href="img/icon-ciudad.png" x="464" y="254" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        
+        <!-- Marcador ejemplo: Batalla - Coordenadas (1440, 810) -->
+        <g class="marker" data-x="1440" data-y="810" data-name="Campo de Batalla" data-icon="batalla">
+          <image href="img/icon-batalla.png" x="1424" y="794" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        
+        <!-- Marcador ejemplo: Punto de interés - Coordenadas (1200, 400) -->
+        <g class="marker" data-x="1200" data-y="400" data-name="Lugar de Interés" data-icon="interes">
+          <image href="img/icon-interes.png" x="1184" y="384" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+      </g>
+    </svg>
   </div>
+
+  <!-- Controles de zoom -->
+  <div class="zoom-controls">
+    <button id="zoomIn" aria-label="Acercar zoom">+</button>
+    <button id="zoomReset" aria-label="Restablecer zoom">⊙</button>
+    <button id="zoomOut" aria-label="Alejar zoom">−</button>
+  </div>
+
+  <!-- Info tooltip para marcadores -->
+  <div id="markerTooltip" class="marker-tooltip" hidden></div>
 
   <script src="js/map.js" defer></script>
   <script src="js/markers.js" defer></script>
-
-  <!-- Inline fallback toggle: robust body-class toggle for legend -> works even if main script errors -->
-  <script>
-    (function(){
-      const btn = document.getElementById('btnLegend');
-      const floating = document.getElementById('floatingLegend');
-      if(!btn || !floating){ console.warn('[fallback] legend elements missing'); return; }
-
-      // Ensure initial state: open
-      document.body.classList.remove('legend-hidden');
-      floating.setAttribute('aria-hidden', 'false');
-      btn.setAttribute('aria-pressed', 'false');
-      btn.setAttribute('aria-expanded', 'true');
-
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const hidden = document.body.classList.toggle('legend-hidden');
-        floating.setAttribute('aria-hidden', hidden ? 'true' : 'false');
-        btn.setAttribute('aria-pressed', hidden ? 'true' : 'false');
-        btn.setAttribute('aria-expanded', hidden ? 'false' : 'true');
-        console.info('[fallback] toggle clicked, hidden=', hidden);
-      });
-
-      // support keyboard activation
-      btn.addEventListener('keydown', (e) => {
-        if(e.key === ' ' || e.key === 'Spacebar' || e.key === 'Enter'){
-          e.preventDefault();
-          btn.click();
-        }
-      });
-    })();
-  </script>
 </body>
 </html>

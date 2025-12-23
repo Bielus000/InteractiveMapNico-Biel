@@ -1,112 +1,135 @@
-// Map markers interaction - show info panel on click
-(function(){
-  // Wait for DOM to be fully loaded
-  function initMarkers(){
-    const infoPanel = document.getElementById('infoPanel');
-    const infoPanelContent = document.getElementById('infoPanelContent');
-    const infoPanelClose = document.getElementById('infoPanelClose');
-    const markers = document.querySelectorAll('.map-marker');
-    const mapCanvas = document.getElementById('mapCanvas');
-    const mapImage = document.getElementById('mapImage');
+// GUÍA PARA COLOCAR MARCADORES EN EL MAPA
+// =========================================
 
-    if(!infoPanel || !infoPanelContent || !infoPanelClose){
-      console.warn('[markers] panel elements missing');
-      return;
-    }
-    if(!markers.length){
-      console.warn('[markers] no markers found');
-      return;
-    }
+// El mapa usa un sistema de coordenadas SVG con viewBox="0 0 1920 1080"
+// - Ancho total: 1920 (0 = izquierda, 1920 = derecha)
+// - Alto total: 1080 (0 = arriba, 1080 = abajo)
+// - Centro del mapa: (960, 540)
 
-    // Content templates for each marker type
-    const markerData = {
-      capital: {
-        title: 'Capital',
-        description: 'Centro político y administrativo del reino. Aquí reside la corte real y se toman las decisiones más importantes.'
-      },
-      ciudad: {
-        title: 'Fortaleza',
-        description: 'Estructura defensiva fortificada que protege las fronteras y rutas comerciales. Guarnición militar permanente.'
-      },
-      pueblo: {
-        title: 'Pueblo',
-        description: 'Asentamiento rural dedicado principalmente a la agricultura y el comercio local. Población estable.'
-      },
-      interes: {
-        title: 'Punto de Interés',
-        description: 'Ubicación de importancia histórica, cultural o estratégica. Puede contener ruinas, monumentos o recursos especiales.'
-      },
-      batalla: {
-        title: 'Frente de Batalla',
-        description: 'Zona de conflicto activo. Las fuerzas militares están desplegadas y se libran combates frecuentes.'
-      },
-      info: {
-        title: 'Centro de Información',
-        description: 'Punto de encuentro donde se recopila y distribuye información sobre el territorio y acontecimientos recientes.'
-      }
-    };
+// ICONOS DISPONIBLES:
+// -------------------
+// - icon-batalla.png: Para lugares de batallas históricas
+// - icon-capital.png: Para la capital o ciudades principales
+// - icon-ciudad.png: Para ciudades normales
+// - icon-info.png: Para puntos de información general
+// - icon-interes.png: Para lugares de interés turístico/cultural
+// - icon-leyenda.png: Para lugares mitológicos o legendarios
+// - icon-pueblo.png: Para pueblos pequeños
 
-    function showInfoPanel(markerType, markerName){
-      const data = markerData[markerType] || markerData.info;
-      
-      infoPanelContent.innerHTML = `
-        <h2>${markerName || data.title}</h2>
-        <p><strong>Tipo:</strong> ${data.title}</p>
-        <p>${data.description}</p>
-        <p style="margin-top: 20px; font-size: 13px; opacity: 0.8;">Haz clic en la X o presiona ESC para cerrar este panel.</p>
-      `;
-      
-      infoPanel.classList.add('visible');
-      infoPanel.setAttribute('aria-hidden', 'false');
-      console.info('[markers] panel opened for:', markerType, markerName);
-    }
+// CÓMO AÑADIR UN NUEVO MARCADOR:
+// ------------------------------
+// 1. Abre map.html
+// 2. Busca la sección <g id="markersGroup">
+// 3. Copia este template y pégalo dentro de markersGroup:
 
-    function hideInfoPanel(){
-      infoPanel.classList.remove('visible');
-      infoPanel.setAttribute('aria-hidden', 'true');
-      console.info('[markers] panel closed');
-    }
+/*
+IMPORTANTE: El atributo x e y de la imagen deben ser:
+- x = coordenada_x - 16 (para centrar el icono de 32px)
+- y = coordenada_y - 16 (para centrar el icono de 32px)
 
-    // Attach click handlers to markers
-    markers.forEach(marker => {
-      marker.addEventListener('click', (e) => {
-        e.stopPropagation(); // prevent map click from closing
-        const type = marker.dataset.type || 'info';
-        const name = marker.dataset.name || '';
-        showInfoPanel(type, name);
-        console.info('[markers] marker clicked:', type, name);
-      });
+TEMPLATE:
+<g class="marker" data-x="TU_X" data-y="TU_Y" data-name="NOMBRE" data-icon="TIPO_ICONO">
+  <image href="img/icon-TIPO_ICONO.png" x="TU_X_MENOS_16" y="TU_Y_MENOS_16" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+</g>
+
+EJEMPLO con coordenadas (960, 540):
+<g class="marker" data-x="960" data-y="540" data-name="Mi Ciudad" data-icon="ciudad">
+  <image href="img/icon-ciudad.png" x="944" y="524" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+</g>
+*/
+
+// 4. Reemplaza:
+//    - TU_X: coordenada horizontal (0-1920)
+//    - TU_Y: coordenada vertical (0-1080)
+//    - TU_X_MENOS_16: TU_X - 16
+//    - TU_Y_MENOS_16: TU_Y - 16
+//    - TIPO_ICONO: batalla | capital | ciudad | info | interes | leyenda | pueblo
+//    - NOMBRE: nombre que aparece en el tooltip
+
+// EJEMPLOS DE COORDENADAS:
+// -------------------------
+const coordenadasReferencia = {
+  // Esquinas
+  'Superior Izquierda': { x: 0, y: 0 },
+  'Superior Derecha': { x: 1920, y: 0 },
+  'Inferior Izquierda': { x: 0, y: 1080 },
+  'Inferior Derecha': { x: 1920, y: 1080 },
+  
+  // Bordes centrales
+  'Centro Superior': { x: 960, y: 0 },
+  'Centro Inferior': { x: 960, y: 1080 },
+  'Centro Izquierdo': { x: 0, y: 540 },
+  'Centro Derecho': { x: 1920, y: 540 },
+  
+  // Centro absoluto
+  'Centro': { x: 960, y: 540 },
+  
+  // Cuadrantes (ejemplos)
+  'Cuadrante NW': { x: 480, y: 270 },
+  'Cuadrante NE': { x: 1440, y: 270 },
+  'Cuadrante SW': { x: 480, y: 810 },
+  'Cuadrante SE': { x: 1440, y: 810 }
+};
+
+// CÓMO ENCONTRAR LAS COORDENADAS EXACTAS:
+// ----------------------------------------
+// Método 1: Usa las herramientas de desarrollador del navegador
+// 1. Abre map.html en el navegador
+// 2. Presiona F12 para abrir DevTools
+// 3. Ve a la consola y ejecuta este código:
+
+function enableCoordinatePicker() {
+  const svg = document.getElementById('mapSvg');
+  svg.addEventListener('click', (e) => {
+    const rect = svg.getBoundingClientRect();
+    const x = Math.round((e.clientX - rect.left) * (1920 / rect.width));
+    const y = Math.round((e.clientY - rect.top) * (1080 / rect.height));
+    const imageX = x - 16; // Centrar el icono de 32px
+    const imageY = y - 16; // Centrar el icono de 32px
+    console.log(`\n📍 Coordenadas: (${x}, ${y})`);
+    console.log(`\n📋 TEMPLATE COMPLETO - Elige un icono:\n`);
+    
+    const iconos = ['batalla', 'capital', 'ciudad', 'info', 'interes', 'leyenda', 'pueblo'];
+    iconos.forEach(icono => {
+      console.log(`<!-- ${icono.toUpperCase()} -->`);
+      console.log(`<g class="marker" data-x="${x}" data-y="${y}" data-name="Nombre Ubicación" data-icon="${icono}">`);
+      console.log(`  <image href="img/icon-${icono}.png" x="${imageX}" y="${imageY}" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>`);
+      console.log(`</g>\n`);
     });
+  });
+  console.log('✅ Coordinate picker activado. Haz clic en el mapa para obtener coordenadas y templates.');
+}
 
-    // Close button
-    infoPanelClose.addEventListener('click', (e) => {
-      e.stopPropagation();
-      hideInfoPanel();
-    });
+// 4. Ejecuta: enableCoordinatePicker()
+// 5. Haz clic en cualquier parte del mapa
+// 6. La consola te mostrará las coordenadas y templates completos para todos los iconos
 
-    // Close on ESC
-    document.addEventListener('keydown', (e) => {
-      if((e.key === 'Escape' || e.key === 'Esc') && infoPanel.classList.contains('visible')){
-        hideInfoPanel();
-      }
-    });
+// CAMBIAR TAMAÑO DE ICONOS:
+// --------------------------
+// Si quieres iconos más grandes o pequeños:
+// 1. Cambia width y height (mantén ambos iguales para evitar distorsión)
+// 2. Ajusta x e y restando la mitad del nuevo tamaño
+// Ejemplo para iconos de 48px:
+//   width="48" height="48" x="TU_X_MENOS_24" y="TU_Y_MENOS_24"
 
-    // Close when clicking outside panel (on canvas area)
-    mapCanvas.addEventListener('click', (e) => {
-      // Don't close if click was on a marker
-      if(e.target.closest('.map-marker')) return;
-      if(infoPanel.classList.contains('visible')){
-        hideInfoPanel();
-      }
-    });
+// AÑADIR INTERACCIÓN AL HACER CLIC:
+// ----------------------------------
+// Los marcadores ya tienen eventos de clic configurados en map.js
+// Para añadir funcionalidad personalizada, modifica la sección en map.js:
+//
+// marker.addEventListener('click', (e) => {
+//   e.stopPropagation();
+//   const name = marker.getAttribute('data-name');
+//   const icon = marker.getAttribute('data-icon');
+//   // Aquí añade tu código personalizado
+// });
 
-    console.info('[markers] initialized', markers.length, 'markers');
-  }
+// MARCADORES DE EJEMPLO INCLUIDOS:
+// ---------------------------------
+// 1. Capital Central: (960, 540) - icon-capital.png
+// 2. Ciudad Norte: (480, 270) - icon-ciudad.png
+// 3. Campo de Batalla: (1440, 810) - icon-batalla.png
+// 4. Lugar de Interés: (1200, 400) - icon-interes.png
 
-  // Wait for DOM ready
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', initMarkers);
-  } else {
-    initMarkers();
-  }
-})();
+// Puedes eliminarlos o modificarlos según tus necesidades.
+

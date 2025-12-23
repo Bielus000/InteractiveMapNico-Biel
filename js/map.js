@@ -1,225 +1,196 @@
-// Map interaction: smooth zoom for map image
-(function(){
-  const canvas = document.getElementById('mapCanvas');
-  const img = document.getElementById('mapImage');
+(() => {
+  const svg = document.getElementById('mapSvg');
+  const mapContainer = document.querySelector('.map-container');
+  const layer1 = document.getElementById('layer1');
+  const layer2 = document.getElementById('layer2');
+  const markersGroup = document.getElementById('markersGroup');
   const zoomInBtn = document.getElementById('zoomIn');
   const zoomOutBtn = document.getElementById('zoomOut');
+  const zoomResetBtn = document.getElementById('zoomReset');
+  const tooltip = document.getElementById('markerTooltip');
 
-  if (!canvas || !img) return;
+  if (!svg || !layer1 || !layer2 || !markersGroup) return;
 
-  // State (scale initialized to fit the image inside the canvas)
-  let targetScale = 1;
+  // Estado del mapa
   let scale = 1;
-  let minScale = 1; // will be updated after image loads to fit scale
-  let maxScale = 3; // will be updated relative to fit scale
-  const zoomFactor = 1.18; // multiplicative step
-  const ease = 0.08; // smoothing factor
-
-  // Panning state
-  let targetOffsetX = 0, targetOffsetY = 0;
-  let offsetX = 0, offsetY = 0;
+  let translateX = 0;
+  let translateY = 0;
   let isDragging = false;
-  let dragStartX = 0, dragStartY = 0;
-  let dragStartOffsetX = 0, dragStartOffsetY = 0;
+  let startX = 0;
+  let startY = 0;
 
-  // Initialize fit-to-screen scale once image loads
-  function initFit(){
-    const cw = canvas.clientWidth;
-    const ch = canvas.clientHeight;
-    const iw = img.naturalWidth || img.width;
-    const ih = img.naturalHeight || img.height;
-    if(!iw || !ih) return;
+  const MIN_SCALE = 1;
+  const MAX_SCALE = 4;
+  const ZOOM_STEP = 0.3;
+  const LAYER2_THRESHOLD = 1.8; // A partir de qué zoom se muestra la capa 2
+  const MARKERS_THRESHOLD = 2.2; // A partir de qué zoom se muestran los marcadores
 
-    // Compute scales: fit means entire image visible in viewport
-    const fit = Math.min(cw / iw, ch / ih);     // contain - entire image visible
-    const cover = Math.max(cw / iw, ch / ih);   // cover (fill) - image fills viewport
-
-    // Use fit as initial scale so the entire map is visible from the start
-    minScale = fit;
-    maxScale = Math.max(cover * 3, cover + 0.5);
-
-    scale = fit;
-    targetScale = fit;
-    // Reset offsets to center the image properly
-    targetOffsetX = offsetX = 0;
-    targetOffsetY = offsetY = 0;
-    img.style.transform = `translate(-50%, -50%) translate3d(0px, 0px, 0) scale(${scale.toFixed(5)})`;
-
-    // Debug: report calculated scales and expose current scale on the container for verification
-    console.info('[map] initFit', { fit, cover, minScale, maxScale, scale });
-    try{ canvas.dataset.currentScale = scale.toFixed(5); }catch(e){}
-  }
-
-  // Run on load and on resize - IMPORTANT: call this first before render loop starts
-  img.addEventListener('load', initFit);
-  window.addEventListener('resize', initFit);
-  
-  // If image is already cached/complete, initialize immediately
-  if(img.complete) {
-    initFit();
-  }
-
-  // Helpers
-  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-
-  // Events
-  zoomInBtn?.addEventListener('click', () => {
-    targetScale = clamp(targetScale * zoomFactor, minScale, maxScale);
-  });
-
-  zoomOutBtn?.addEventListener('click', () => {
-    targetScale = clamp(targetScale / zoomFactor, minScale, maxScale);
-  });
-
-  // mousewheel zoom (ctrl+wheel or wheel alone) - smooth
-  canvas.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    const delta = e.deltaY || e.wheelDelta;
-    if (delta > 0) {
-      targetScale = clamp(targetScale / 1.07, minScale, maxScale);
+  // Aplicar transformación
+  function updateTransform(smooth = false) {
+    // Toggle smooth transition class
+    if (smooth) {
+      svg.classList.add('smooth-zoom');
     } else {
-      targetScale = clamp(targetScale * 1.07, minScale, maxScale);
+      svg.classList.remove('smooth-zoom');
+    }
+    
+    svg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    
+    // Cambiar opacidad de capas según zoom
+    const layer2Opacity = Math.max(0, Math.min(1, (scale - LAYER2_THRESHOLD) / 0.5));
+    layer2.style.opacity = layer2Opacity;
+    
+    // Mostrar/ocultar marcadores según zoom
+    const markersOpacity = Math.max(0, Math.min(1, (scale - MARKERS_THRESHOLD) / 0.3));
+    markersGroup.style.opacity = markersOpacity;
+  }
+
+  // Zoom
+  function setZoom(newScale, centerX = null, centerY = null, smooth = true) {
+    const oldScale = scale;
+    scale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, newScale));
+
+    if (centerX !== null && centerY !== null) {
+      // Zoom hacia un punto específico
+      const rect = svg.getBoundingClientRect();
+      const offsetX = centerX - rect.left - rect.width / 2;
+      const offsetY = centerY - rect.top - rect.height / 2;
+      
+      translateX -= offsetX * (scale / oldScale - 1);
+      translateY -= offsetY * (scale / oldScale - 1);
+    }
+
+    // Limitar el desplazamiento
+    constrainTranslation();
+    updateTransform(smooth);
+  }
+
+  // Limitar el desplazamiento para no salir del mapa
+  function constrainTranslation() {
+    const rect = svg.getBoundingClientRect();
+    const maxX = (rect.width * (scale - 1)) / 2;
+    const maxY = (rect.height * (scale - 1)) / 2;
+
+    translateX = Math.max(-maxX, Math.min(maxX, translateX));
+    translateY = Math.max(-maxY, Math.min(maxY, translateY));
+  }
+
+  // Botones de zoom
+  zoomInBtn?.addEventListener('click', () => setZoom(scale + ZOOM_STEP));
+  zoomOutBtn?.addEventListener('click', () => setZoom(scale - ZOOM_STEP));
+  zoomResetBtn?.addEventListener('click', () => {
+    scale = 1;
+    translateX = 0;
+    translateY = 0;
+    updateTransform();
+  });
+
+  // Zoom con rueda del ratón
+  mapContainer.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = -Math.sign(e.deltaY) * ZOOM_STEP;
+    setZoom(scale + delta, e.clientX, e.clientY);
+  }, { passive: false });
+
+  // Arrastre del mapa
+  mapContainer.addEventListener('mousedown', (e) => {
+    if (scale <= 1) return; // No arrastrar si no hay zoom
+    isDragging = true;
+    startX = e.clientX - translateX;
+    startY = e.clientY - translateY;
+    mapContainer.classList.add('dragging');
+    svg.classList.add('no-transition'); // Desactivar transición durante arrastre
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    translateX = e.clientX - startX;
+    translateY = e.clientY - startY;
+    constrainTranslation();
+    updateTransform(false); // Sin transición durante arrastre
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+    mapContainer.classList.remove('dragging');
+    svg.classList.remove('no-transition');
+  });
+
+  // Touch support para móvil
+  let touchStartDistance = 0;
+  let touchStartScale = 1;
+
+  mapContainer.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      // Arrastre con un dedo
+      isDragging = true;
+      startX = e.touches[0].clientX - translateX;
+      startY = e.touches[0].clientY - translateY;
+    } else if (e.touches.length === 2) {
+      // Zoom con dos dedos
+      isDragging = false;
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      touchStartDistance = Math.sqrt(dx * dx + dy * dy);
+      touchStartScale = scale;
+    }
+  });
+
+  mapContainer.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 1 && isDragging) {
+      translateX = e.touches[0].clientX - startX;
+      translateY = e.touches[0].clientY - startY;
+      constrainTranslation();
+      updateTransform();
+    } else if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const newScale = touchStartScale * (distance / touchStartDistance);
+      
+      const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      setZoom(newScale, centerX, centerY);
     }
   }, { passive: false });
 
-  // Pointer-based panning (click+drag / touch)
-  function getClampOffsets(s){
-    const iw = img.naturalWidth || img.width;
-    const ih = img.naturalHeight || img.height;
-    const displayW = iw * s;
-    const displayH = ih * s;
-    const maxX = Math.max(0, (displayW - canvas.clientWidth) / 2);
-    const maxY = Math.max(0, (displayH - canvas.clientHeight) / 2);
-    return { maxX, maxY };
-  }
-
-  canvas.addEventListener('pointerdown', (e) => {
-    e.preventDefault();
-    try{ canvas.setPointerCapture(e.pointerId); }catch(e){}
-    isDragging = true;
-    dragStartX = e.clientX;
-    dragStartY = e.clientY;
-    dragStartOffsetX = targetOffsetX;
-    dragStartOffsetY = targetOffsetY;
-    canvas.classList.add('dragging');
-  });
-
-  canvas.addEventListener('pointermove', (e) => {
-    if(!isDragging) return;
-    const dx = e.clientX - dragStartX;
-    const dy = e.clientY - dragStartY;
-    const { maxX, maxY } = getClampOffsets(targetScale);
-    targetOffsetX = clamp(dragStartOffsetX + dx, -maxX, maxX);
-    targetOffsetY = clamp(dragStartOffsetY + dy, -maxY, maxY);
-  });
-
-  canvas.addEventListener('pointerup', (e) => {
+  mapContainer.addEventListener('touchend', () => {
     isDragging = false;
-    try{ canvas.releasePointerCapture(e.pointerId); }catch(e){}
-    canvas.classList.remove('dragging');
   });
-  canvas.addEventListener('pointercancel', () => { isDragging = false; canvas.classList.remove('dragging'); });
 
-  // Animation loop: interpolate and apply transform
-  function render(){
-    // Ensure initialization if not done
-    const iw = img.naturalWidth || img.width;
-    const ih = img.naturalHeight || img.height;
-    if((iw > 0 && ih > 0) && (minScale === 1 && maxScale === 3)){
-      // Initialization hasn't run yet, do it now
-      initFit();
-    }
-
-    // smooth scale
-    scale += (targetScale - scale) * (ease + 0.02);
-
-    // ensure offsets are within bounds for current scale
-    const { maxX, maxY } = getClampOffsets(scale);
-    targetOffsetX = clamp(targetOffsetX, -maxX, maxX);
-    targetOffsetY = clamp(targetOffsetY, -maxY, maxY);
-
-    // smooth offsets
-    offsetX += (targetOffsetX - offsetX) * (ease + 0.02);
-    offsetY += (targetOffsetY - offsetY) * (ease + 0.02);
-
-    // apply transform: keep centered translate(-50%,-50%), then translate by offsets and scale
-    img.style.transform = `translate(-50%, -50%) translate3d(${offsetX.toFixed(2)}px, ${offsetY.toFixed(2)}px, 0) scale(${scale.toFixed(5)})`;
-
-    // Update markers scale to keep them readable during zoom
-    const markers = document.querySelectorAll('.map-marker');
-    markers.forEach(marker => {
-      // Inverse scale: as map zooms in, markers shrink proportionally to stay visible
-      const markerScale = Math.max(0.4, Math.min(1.2, 0.8 / scale));
-      marker.style.transform = `scale(${markerScale})`;
-    });
-    try{ canvas.dataset.currentScale = scale.toFixed(5); }catch(e){}
-
-    requestAnimationFrame(render);
-  }
-
-  // Kick off
-  requestAnimationFrame(render);
-
-  // -----------------------------
-  // Legend toggle (left panel button controls floating legend)
-  // Floating legend is OPEN by default; clicking the left-panel button toggles it closed/open
-  // -----------------------------
-  (function(){
-    const btnLegend = document.getElementById('btnLegend');
-    const floating = document.getElementById('floatingLegend');
-    if(!btnLegend || !floating) { console.warn('[map] legend elements missing'); return; } // nothing to do
-
-    console.info('[map] legend init: btnLegend, floatingLegend found');
-
-    // Initialize ARIA and state: open by default
-    floating.classList.remove('legend-closed');
-    floating.setAttribute('aria-hidden', 'false');
-    btnLegend.setAttribute('aria-pressed', 'false');
-    btnLegend.setAttribute('aria-expanded', 'true');
-
-    // Toggle handler
-    function toggleLegend(){
-      const closed = floating.classList.toggle('legend-closed');
-      console.info('[map] toggleLegend -> closed=', closed);
-      floating.setAttribute('aria-hidden', closed ? 'true' : 'false');
-      btnLegend.setAttribute('aria-expanded', closed ? 'false' : 'true');
-      btnLegend.setAttribute('aria-pressed', closed ? 'true' : 'false');
-
-      // If we just closed and focus was inside the legend, move it back to the button
-      if(closed){
-        if(floating.contains(document.activeElement)){
-          btnLegend.focus();
-        }
-      }
-    }
-
-    // Click and keyboard activation (Enter / Space / Spacebar)
-    btnLegend.addEventListener('click', (e)=>{ toggleLegend(); });
-    btnLegend.addEventListener('keydown', (e)=>{
-      if(e.key === ' ' || e.key === 'Spacebar' || e.key === 'Enter'){
-        e.preventDefault();
-        toggleLegend();
+  // Tooltips de marcadores
+  const markers = document.querySelectorAll('.marker');
+  markers.forEach(marker => {
+    marker.addEventListener('mouseenter', (e) => {
+      const name = marker.getAttribute('data-name');
+      if (name && tooltip) {
+        tooltip.textContent = name;
+        tooltip.hidden = false;
       }
     });
 
-    // Optional: close on ESC
-    document.addEventListener('keydown', (e)=>{
-      if(e.key === 'Escape' || e.key === 'Esc'){
-        if(!floating.classList.contains('legend-closed')){
-          toggleLegend();
-        }
+    marker.addEventListener('mousemove', (e) => {
+      if (tooltip && !tooltip.hidden) {
+        tooltip.style.left = `${e.clientX}px`;
+        tooltip.style.top = `${e.clientY}px`;
       }
     });
 
-    // Optional: close when clicking outside (on the map)
-    document.addEventListener('click', (e)=>{
-      // if click target is inside floating or is the button, ignore
-      if(floating.contains(e.target) || btnLegend.contains(e.target)) return;
-      if(!floating.classList.contains('legend-closed')){
-        // close it
-        toggleLegend();
-      }
+    marker.addEventListener('mouseleave', () => {
+      if (tooltip) tooltip.hidden = true;
     });
 
-  })();
+    marker.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const name = marker.getAttribute('data-name');
+      const x = marker.getAttribute('data-x');
+      const y = marker.getAttribute('data-y');
+      console.log(`Marcador clickeado: ${name} en (${x}, ${y})`);
+      // Aquí puedes añadir lógica para mostrar más información
+    });
+  });
+
+  // Inicializar
+  updateTransform();
 })();
