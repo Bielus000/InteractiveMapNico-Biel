@@ -1,3 +1,5 @@
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@200,400,700,600,500,300&display=swap');
+
 :root{
     --color-glass-styile: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(0,0,0,0.000) 0.01%,rgba(0,0,0,0.000) 99.99%,rgba(255,255,255,1) 100%);
 	--color-light-gray-footer: rgba(230,230,230,1);
@@ -9,7 +11,7 @@
 }
 .text-style-normal-text {
 	font-size: 24px;
-	font-family: Inter;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 700;
 	font-style: normal;
 	text-decoration: none;
@@ -17,7 +19,7 @@
 }
 .text-style-subtitle-text {
 	font-size: 16px;
-	font-family: Inter;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 700;
 	font-style: normal;
 	text-decoration: none;
@@ -25,7 +27,7 @@
 }
 .text-style-title-text {
 	font-size: 32px;
-	font-family: Inter;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 700;
 	font-style: normal;
 	text-decoration: none;
@@ -33,7 +35,7 @@
 }
 .text-style-big-text {
 	font-size: 64px;
-	font-family: Inter;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 900;
 	font-style: normal;
 	letter-spacing: -0.04em;
@@ -42,7 +44,7 @@
 }
 .text-style-title-history-text {
 	font-size: 48px;
-	font-family: Inter;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 900;
 	font-style: normal;
 	text-decoration: none;
@@ -64,7 +66,57 @@ html, body {
 
 body {
   background: #130706;
-  font-family: Inter, system-ui, Arial, sans-serif;
+  font-family: 'Clash Display', sans-serif;
+}
+
+/* Left Sidebar */
+.left-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 64px;
+  background: rgba(40, 35, 32, 0.9); /* #282320 at 90% */
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 8px;
+}
+
+.left-sidebar .home-logo {
+  position: static;
+  width: 44px;
+  height: 44px;
+}
+
+.left-sidebar .home-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.35));
+}
+
+.sidebar-btn {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: #C28F2C;
+  color: #F9F9F9;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.sidebar-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.45);
+  background: #A87421;
 }
 
 /* Home Logo */
@@ -137,55 +189,92 @@ body {
 /* Floating legend */
 .legend {
   position: fixed;
-  left: 20px;
-  bottom: 30px;
+  left: calc(80px + 24px); /* clear left sidebar (64px) + margin */
+  bottom: -20px;
   z-index: 80;
-  background: rgba(255, 255, 255, 0.95);
-  color: #1a1a1a;
+  background: rgba(40, 35, 32, 0.9); /* #282320 at 90% */
+  color: #F9F9F9;
   padding: 12px 14px;
   border-radius: 10px;
   border: 1px solid rgba(0,0,0,0.12);
   box-shadow: 0 10px 24px rgba(0,0,0,0.18);
   min-width: 220px;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 300ms ease, visibility 300ms ease;
+}
+
+.legend.hidden {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .legend-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 12px;
   margin-bottom: 8px;
+  position: relative;
+}
+
+.legend-header strong {
+  text-transform: uppercase;
+  color: #F2AF2E;
+  font-weight: 800;
+  flex: 1;
+  text-align: center;
 }
 
 .legend-header button {
   appearance: none;
   border: 0;
-  background: rgba(0,0,0,0.06);
-  color: #1a1a1a;
+  background: rgba(255,255,255,0.2);
+  color: #F9F9F9;
   width: 24px;
   height: 24px;
   border-radius: 6px;
   cursor: pointer;
+  position: absolute;
+  right: 0;
 }
 
 .legend-list {
   list-style: none;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 8px;
+  gap: 0;
+  row-gap: -20px;
+  margin-left: -18px;
+  width: calc(100% + 14px);
+  padding-left: 0;
 }
 
 .legend-list li {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: flex-start;
+  gap: 8px;
   font-weight: 700;
+  padding: 0;
+  padding-left: -10px;
+  margin: 0;
+  margin-bottom: -35px;
+  line-height: 1;
+  min-height: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.legend-list li:last-child {
+  margin-bottom: 0;
 }
 
 .legend-list img {
-  width: 40px;
-  height: 40px;
+  width: 80px;
+  height: 80px;
   display: block;
+  flex-shrink: 0;
 }
 
 .legend-toggle {
@@ -216,8 +305,8 @@ body {
   right: 0;
   height: 100vh;
   width: min(560px, 48vw);
-  background: #ffffff;
-  color: #1a1a1a;
+  background: rgba(40, 35, 32, 0.9); /* #282320 at 90% */
+  color: #F9F9F9;
   transform: translateX(100%);
   transition: transform 280ms ease;
   z-index: 95;
@@ -234,7 +323,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 14px 16px;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .side-panel-header button {
@@ -243,11 +332,33 @@ body {
   background: transparent;
   font-size: 24px;
   cursor: pointer;
+  color: #F9F9F9;
 }
 
 .side-panel-body {
   padding: 16px;
   overflow: auto;
+}
+
+.marker-header-info {
+  margin-bottom: 16px;
+}
+
+.marker-title-main {
+  font-size: 24px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #F2AF2E;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+}
+
+.marker-subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #C28F2C;
+  margin: 0;
+  line-height: 1.3;
 }
 
 .marker-title {
@@ -257,6 +368,14 @@ body {
 }
 
 .marker-title img { width: 28px; height: 28px; }
+
+.marker-desc {
+  color: #F9F9F9;
+  line-height: 1.55;
+}
+
+.panel-hero { margin: 12px 0 14px; }
+.panel-hero img { width: 100%; height: auto; border-radius: 10px; display: block; }
 
 /* Zoom Controls */
 .zoom-controls {
@@ -274,8 +393,8 @@ body {
   height: 48px;
   border: 0;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.95);
-  color: #1a1a1a;
+  background: #C28F2C;
+  color: #F9F9F9;
   font-size: 24px;
   font-weight: 700;
   cursor: pointer;
@@ -286,7 +405,7 @@ body {
 .zoom-controls button:hover {
   transform: scale(1.05);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
-  background: rgba(255, 255, 255, 1);
+  background: #A87421;
 }
 
 .zoom-controls button:active {
@@ -354,6 +473,10 @@ body {
     height: 50px;
     top: 15px;
     left: 15px;
+  }
+  
+  .legend {
+    left: calc(56px + 16px); /* slightly smaller sidebar clearance on mobile */
   }
   
   .zoom-controls {

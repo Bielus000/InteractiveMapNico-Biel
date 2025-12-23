@@ -124,12 +124,4 @@ function enableCoordinatePicker() {
 //   // Aquí añade tu código personalizado
 // });
 
-// MARCADORES DE EJEMPLO INCLUIDOS:
-// ---------------------------------
-// 1. Capital Central: (960, 540) - icon-capital.png
-// 2. Ciudad Norte: (480, 270) - icon-ciudad.png
-// 3. Campo de Batalla: (1440, 810) - icon-batalla.png
-// 4. Lugar de Interés: (1200, 400) - icon-interes.png
-
-// Puedes eliminarlos o modificarlos según tus necesidades.
 

@@ -1,3 +1,5 @@
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@200,400,700,600,500,300&display=swap');
+
 /* Base styles for Noctara - desktop-first scaffold */
 
 /* Reset & Layout */
@@ -47,7 +49,7 @@ main {
 }
 .text-style-normal-text {
 	font-size: 24px;
-	font-family: Inter;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 700;
 	font-style: normal;
 	text-decoration: none;
@@ -55,7 +57,7 @@ main {
 }
 .text-style-subtitle-text {
 	font-size: 16px;
-	font-family: Inter;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 700;
 	font-style: normal;
 	text-decoration: none;
@@ -63,7 +65,7 @@ main {
 }
 .text-style-title-text {
 	font-size: 32px;
-	font-family: Inter;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 700;
 	font-style: normal;
 	text-decoration: none;
@@ -71,7 +73,7 @@ main {
 }
 .text-style-big-text {
 	font-size: 64px;
-	font-family: Inter;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 900;
 	font-style: normal;
 	letter-spacing: -0.04em;
@@ -80,7 +82,7 @@ main {
 }
 .text-style-title-history-text {
 	font-size: 48px;
-	font-family: Inter;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 900;
 	font-style: normal;
 	text-decoration: none;

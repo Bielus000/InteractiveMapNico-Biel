@@ -1,3 +1,5 @@
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@200,400,700,600,500,300&display=swap');
+
 :root{
     --color-glass-styile: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(0,0,0,0.000) 0.01%,rgba(0,0,0,0.000) 99.99%,rgba(255,255,255,1) 100%);
 	--color-light-gray-footer: rgba(230,230,230,1);
@@ -9,7 +11,7 @@
 }
 .text-style-normal-text {
 	font-size: 24px;
-	font-family: Inter;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 700;
 	font-style: normal;
 	text-decoration: none;
@@ -17,7 +19,7 @@
 }
 .text-style-subtitle-text {
 	font-size: 16px;
-	font-family: Inter;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 700;
 	font-style: normal;
 	text-decoration: none;
@@ -25,7 +27,7 @@
 }
 .text-style-title-text {
 	font-size: 32px;
-	font-family: Inter;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 700;
 	font-style: normal;
 	text-decoration: none;
@@ -33,7 +35,7 @@
 }
 .text-style-big-text {
 	font-size: 64px;
-	font-family: Inter;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 900;
 	font-style: normal;
 	letter-spacing: -0.04em;
@@ -42,7 +44,7 @@
 }
 .text-style-title-history-text {
 	font-size: 48px;
-	font-family: Inter;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 900;
 	font-style: normal;
 	text-decoration: none;
@@ -152,7 +154,7 @@ header .container h1 {
 	padding: 12px 20px;
 	border-radius: 8px;
 	text-transform: uppercase;
-	font-family: Inter, system-ui, Arial, sans-serif;
+	font-family: 'Clash Display', sans-serif;
 	font-weight: 800;
 	font-size: 16px;
 	letter-spacing: 0.04em;

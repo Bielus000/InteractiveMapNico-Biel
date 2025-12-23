@@ -13,6 +13,7 @@
   const tooltip = document.getElementById('markerTooltip');
   const legend = document.getElementById('legend');
   const legendToggle = document.getElementById('legendToggle');
+  const legendDock = document.getElementById('legendDock');
   const legendClose = document.getElementById('legendClose');
   const sidePanel = document.getElementById('sidePanel');
   const sideOverlay = document.getElementById('sideOverlay');
@@ -57,17 +58,6 @@
     markersGroup.forEach(group => {
       group.style.opacity = markersOpacity;
     });
-
-    // Llegenda: amagar quan fem zoom i mostrar toggle
-    if (legend) {
-      if (scale > LEGEND_HIDE_THRESHOLD) {
-        legend.hidden = true;
-        if (legendToggle) legendToggle.hidden = false;
-      } else {
-        legend.hidden = false;
-        if (legendToggle) legendToggle.hidden = true;
-      }
-    }
   }
 
   // Zoom
@@ -149,14 +139,24 @@
   // Llegenda toggle behavior
   legendToggle?.addEventListener('click', () => {
     if (legend) {
-      legend.hidden = false;
+      legend.classList.remove('hidden');
       legendToggle.hidden = true;
     }
   });
   legendClose?.addEventListener('click', () => {
     if (legend) {
-      legend.hidden = true;
+      legend.classList.add('hidden');
       if (legendToggle) legendToggle.hidden = false;
+    }
+  });
+
+  // Left sidebar legend dock button
+  legendDock?.addEventListener('click', () => {
+    if (!legend) return;
+    if (legend.classList.contains('hidden')) {
+      legend.classList.remove('hidden');
+    } else {
+      legend.classList.add('hidden');
     }
   });
 
@@ -270,14 +270,15 @@
       e.stopPropagation();
       const name = marker.getAttribute('data-name') || 'Detall';
       const icon = marker.getAttribute('data-icon') || 'info';
+      const subtitle = marker.getAttribute('data-subtitle') || 'Punt d\'interès';
       const desc = marker.getAttribute('data-desc') || 'Descripció del punt seleccionat. Pots personalitzar aquest contingut amb text, imatges o enllaços.';
       const image = marker.getAttribute('data-image') || '';
 
       const heroImageHtml = image ? `<div class="panel-hero"><img src="${image}" alt="${name}"></div>` : '';
       const contentHtml = `
-        <div class="marker-title">
-          <img src="img/icon-${icon}.png" alt="${icon}">
-          <strong>${name}</strong>
+        <div class="marker-header-info">
+          <h2 class="marker-title-main">${name.toUpperCase()}</h2>
+          <p class="marker-subtitle">${subtitle}</p>
         </div>
         ${heroImageHtml}
         <p class="marker-desc">${desc}</p>

@@ -8,10 +8,17 @@
 </head>
 
 <body>
-  <!-- Logo home button -->
-  <a href="index.html" class="home-logo" aria-label="Volver al inicio">
-    <img src="img/logo2.png" alt="Noctara">
-  </a>
+  <!-- Left vertical sidebar -->
+  <nav class="left-sidebar" aria-label="Barra lateral">
+    <div class="sidebar-top">
+      <a href="index.html" class="home-logo" aria-label="Tornar a l'inici">
+        <img src="img/logo2.png" alt="Noctara">
+      </a>
+    </div>
+    <div class="sidebar-bottom">
+      <button id="legendDock" class="sidebar-btn" aria-label="Alternar llegenda">ℹ</button>
+    </div>
+  </nav>
 
   <!-- Map container -->
   <div class="map-container">
@@ -82,11 +89,11 @@
  <!-- GRUPO DE MARCADORES - PANAFRICANOS -->
    <g id="markersPanafricanos" opacity="0">
         <!-- Marcador: Capital Panafricana -->
-        <g class="marker" data-x="1223" data-y="230" data-name="Capital Panafricana" data-icon="capital" data-desc="Sede del gobierno panafricano y centro administrativo del territorio. Punto neurálgico de comercio y decisiones estratégicas.">
+        <g class="marker" data-x="1223" data-y="230" data-name="Capital Panafricana" data-icon="capital" data-subtitle="Seu del govern" data-desc="Seu del govern panafricà i centre administratiu del territori. Punt neuràlgic del comerç i les decisions estratègiques.">
           <image href="img/icon-capital.png" x="1207" y="214" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
         </g>
         <!-- Marcador: Fortaleza -->
-        <g class="marker" data-x="1200" data-y="830" data-name="Fortaleza" data-icon="fortaleza" data-desc="Emplazamiento clave panafricano. Bastión defensivo alrededor del impacto del meteorito, con alta actividad militar y logística." data-image="img/Impacto-Meteorito.jpg">
+        <g class="marker" data-x="1200" data-y="830" data-name="Fortalesa" data-icon="fortaleza" data-subtitle="Baluard defensiu" data-desc="Emplaçament clau panafricà. Baluard defensiu al voltant de l'impacte del meteorit, amb alta activitat militar i logística." data-image="img/Impacto-Meteorito.jpg">
           <image href="img/icon-ciudad.png" x="464" y="254" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
         </g>
         <!-- Marcador: Pueblo 1 -->
@@ -118,15 +125,15 @@
       <!-- GRUPO DE MARCADORES - OTROS -->
       <g id="markersOtros" opacity="0">
         <!-- Marcador: Frente de Batalla 1 -->
-        <g class="marker" data-x="938" data-y="300" data-name="Frente de Batalla1" data-icon="batalla" data-desc="Primer frente de batalla activo. Zona de conflicto con avances y repliegues constantes.">
+        <g class="marker" data-x="938" data-y="300" data-name="Front de Batalla1" data-icon="batalla" data-subtitle="Zona de conflicte actiu" data-desc="Primer front de batalla actiu. Zona de conflicte amb avanços i retirades constants.">
           <image href="img/icon-batalla.png" x="684" y="484" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
         </g>
         <!-- Marcador: Frente de Batalla 2 -->
-        <g class="marker" data-x="975" data-y="490" data-name="Frente de Batalla2" data-icon="batalla">
+        <g class="marker" data-x="975" data-y="490" data-name="Front de Batalla2" data-icon="batalla">
           <image href="img/icon-batalla.png" x="554" y="284" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
         </g>
         <!-- Marcador: Frente de Batalla 3 -->
-        <g class="marker" data-x="915" data-y="684" data-name="Frente de Batalla3" data-icon="batalla">
+        <g class="marker" data-x="915" data-y="684" data-name="Front de Batalla3" data-icon="batalla">
           <image href="img/icon-batalla.png" x="684" y="484" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
         </g>
         <!-- Marcador: Punto de información 1 -->
@@ -141,8 +148,6 @@
         <g class="marker" data-x="565" data-y="392" data-name="Lago" data-icon="info">
           <image href="img/icon-info.png" x="1184" y="384" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
         </g>
-
-
     </svg>
   </div>
 
@@ -153,23 +158,20 @@
       <button id="legendClose" aria-label="Amaga la llegenda">×</button>
     </div>
     <ul class="legend-list">
-      <li><img src="img/icon-capital.png" alt="Capital"> Capital</li>
-      <li><img src="img/icon-ciudad.png" alt="Ciutat"> Ciutat</li>
-      <li><img src="img/icon-pueblo.png" alt="Poble"> Poble</li>
-      <li><img src="img/icon-batalla.png" alt="Batalla"> Batalla</li>
-      <li><img src="img/icon-interes.png" alt="Interès"> Punt d'interès</li>
-      <li><img src="img/icon-info.png" alt="Info"> Informació</li>
+      <li><img src="img/icon-capital.png" alt="CAPITAL"> CAPITAL</li>
+      <li><img src="img/icon-ciudad.png" alt="FORTALEÇA"> FORTALEÇA</li>
+      <li><img src="img/icon-pueblo.png" alt="POBLE"> POBLE</li>
+      <li><img src="img/icon-batalla.png" alt="ENFRONTAMENT"> ENFRONTAMENT</li>
+      <li><img src="img/icon-interes.png" alt="LLOC D'INTERÈS"> LLOC D'INTERÈS</li>
+      <li><img src="img/icon-info.png" alt="INFORMACIÓ"> INFORMACIÓ</li>
     </ul>
   </aside>
 
-  <!-- Botó per reobrir llegenda quan està amagada -->
-  <button class="legend-toggle" id="legendToggle" aria-label="Mostra la llegenda" hidden>◀</button>
-
   <!-- Controles de zoom -->
   <div class="zoom-controls">
-    <button id="zoomIn" aria-label="Acercar zoom">+</button>
-    <button id="zoomReset" aria-label="Restablecer zoom">⊙</button>
-    <button id="zoomOut" aria-label="Alejar zoom">−</button>
+    <button id="zoomIn" aria-label="Apropa zoom">+</button>
+    <button id="zoomReset" aria-label="Restableix zoom">⊙</button>
+    <button id="zoomOut" aria-label="Allunya zoom">−</button>
   </div>
 
   <!-- Info tooltip para marcadores -->
