@@ -10,67 +10,56 @@
   --accent2: #c1441a; /* burnt orange */
   --muted: #f6f6f6;
   --overlay: rgba(11,5,5,0.55);
+	--color-glass-styile: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(0,0,0,0.000) 0.01%,rgba(0,0,0,0.000) 99.99%,rgba(255,255,255,1) 100%);
+	--color-light-gray-footer: rgba(230,230,230,1);
+	--color-black: rgba(0,0,0,1);
+	--color-white: rgba(255,255,255,1);
+	--color-light-gray: rgba(217,217,217,1);
+	--color-blue: rgba(29,31,59,1);
+	--color-gray: rgba(160,160,160,1);
+}
+.text-style-normal-text {
+	font-size: 24px;
+	font-family: Inter;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	text-transform: none;
+}
+.text-style-subtitle-text {
+	font-size: 16px;
+	font-family: Inter;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	text-transform: none;
+}
+.text-style-title-text {
+	font-size: 32px;
+	font-family: Inter;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	text-transform: none;
+}
+.text-style-big-text {
+	font-size: 64px;
+	font-family: Inter;
+	font-weight: 900;
+	font-style: normal;
+	letter-spacing: -0.04em;
+	text-decoration: none;
+	text-transform: none;
+}
+.text-style-title-history-text {
+	font-size: 48px;
+	font-family: Inter;
+	font-weight: 900;
+	font-style: normal;
+	text-decoration: none;
+	text-transform: none;
 }
 
-/* ---------------------------------------------
-   Reset & Base
-   --------------------------------------------- */
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  background: var(--frame); /* frame color around the site */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Primary font & uppercase as requested */
-html,
-body {
-  font-family: "Clash Display", system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-/* ---------------------------------------------
-   Layout
-   --------------------------------------------- */
-.site-frame {
-  /* Outer frame is body background; site content is inset using padding */
-  padding: 4px 20px 6px 20px; /* tighter vertical padding so map gets closer to top/bottom */
-  height: 100vh;
-  background: transparent;
-  box-sizing: border-box;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.site-frame > main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.container {
-  width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
-}
-
-@media (min-width: 1400px) {
-  .container {
-    width: 1400px;
-  }
-}
 
 /* ---------------------------------------------
    Header / Navigation
