@@ -29,6 +29,18 @@
       <!-- Capa base (map.jpeg) -->
       <rect id="layer1" x="0" y="0" width="1920" height="1080" fill="url(#mapLayer1)"/>
       
+      <!-- Icones visibles a la primera capa (ciutat i capital) -->
+      <g id="layer1Icons">
+        <!-- Ciutat (ajusta data-x/data-y a la posició desitjada) -->
+        <g class="marker" data-x="620" data-y="360" data-name="Ciutat (capa 1)" data-icon="ciudad">
+          <image href="img/icon-ciudad.png" x="604" y="344" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+        <!-- Capital (ajusta data-x/data-y a la posició desitjada) -->
+        <g class="marker" data-x="1320" data-y="720" data-name="Capital (capa 1)" data-icon="capital">
+          <image href="img/icon-capital.png" x="1304" y="704" width="32" height="32" preserveAspectRatio="xMidYMid meet"/>
+        </g>
+      </g>
+      
       <!-- Capa de detalle (map2.jpeg) - se muestra al hacer zoom -->
       <rect id="layer2" x="0" y="0" width="1920" height="1080" fill="url(#mapLayer2)" opacity="0"/>
       

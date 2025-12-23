@@ -32,7 +32,7 @@
   const ZOOM_STEP = 0.3;
   const LAYER2_THRESHOLD = 1.7; // A partir de qué zoom se muestra la capa 2
   const MARKERS_THRESHOLD = 1.7; // A partir de qué zoom se muestran los marcadores
-  const LEGEND_HIDE_THRESHOLD = 1.2; // Zoom a partir del cual amagar llegenda
+  const LEGEND_HIDE_THRESHOLD = 1.3; // Zoom a partir del cual amagar llegenda
 
   // Aplicar transformación
   function updateTransform(smooth = false) {
